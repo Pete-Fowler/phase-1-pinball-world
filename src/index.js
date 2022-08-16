@@ -1,46 +1,32 @@
 
 // When the user clicks on one of the games in the list, display all the details of that game
 // in .game-details
+const imgBox = document.querySelector('#detail-image');
+const title = document.querySelector('#detail-title');
+const score = document.querySelector('#detail-high-score');
+const form = document.querySelector('form');
+let clickedGame;
 
-const displayDetails = (image, name, manufacturer, highScore) => {
-  const details = document.querySelector('.game-details');
-  details.textContent = '';
-  const img = document.createElement('img');
-  img.src = image;
-
-  const nameP = document.createElement('p');
-  nameP.textContent = name;
-
-  const mP = document.createElement('p');
-  mP.textContent = manufacturer;
-
-  const hP = document.createElement('p');
-  hP.textContent = highScore;
-  details.append(img, nameP, mP, hP);
+const displayDetails = (game) => {
+  clickedGame = game;
+  imgBox.src = game.image;
+  title.textContent = game.name;
+  score.textContent = game.high_score;
 }
 
 const renderGames = (games) => {
   const list = document.querySelector('.game-list');
-  
   for(const game of games) {
     if(games.indexOf(game) === 0) {
-      const imgBox = document.querySelector('#detail-image');
       imgBox.src = game.image;
-
-      const title = document.querySelector('#detail-title');
       title.textContent = game.name;
-
-      const score = document.querySelector('#detail-high-score');
       score.textContent = game.high_score;
-      
-      title.addEventListener('click', () => {displayDetails(game.image, game.name, 
-        game.manufacturer_name, game.high_score)});      
+      title.addEventListener('click', () => {displayDetails(game)});      
       } else {
     const title = document.createElement('h5');
     title.textContent = `${game.name} (${game.manufacturer_name})`;
     list.append(title);
-    title.addEventListener('click', () => {displayDetails(game.image, game.name, 
-      game.manufacturer_name, game.high_score)});
+    title.addEventListener('click', () => {displayDetails(game)});
     }
   }
 }
@@ -51,6 +37,10 @@ const getGames = () => {
   .then(data => renderGames(data))
 }
 
-
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+  clickedGame.high_score = form['score-input'].value;
+  score.textContent = clickedGame.high_score;
+});
 
 getGames();
