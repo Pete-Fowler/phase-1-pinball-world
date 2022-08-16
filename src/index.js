@@ -1,13 +1,24 @@
 
 const renderGames = (games) => {
   const list = document.querySelector('.game-list');
+  
   for(const game of games) {
-    const title = document.createElement('h5');
-    title.textContent = `${game.name} (${game.manfacturer_name})`;
-    list.append(title);
-    // console.log(game);
-  }
+    if(games.indexOf(game) === 0) {
+      const imgBox = document.querySelector('#detail-image');
+      imgBox.src = game.image;
 
+      const title = document.querySelector('#detail-title');
+      title.textContent = game.name;
+
+      const score = document.querySelector('#detail-high-score');
+      score.textContent = game.high_score;
+      
+      } else {
+    const title = document.createElement('h5');
+    title.textContent = `${game.name} (${game.manufacturer_name})`;
+    list.append(title);
+    }
+  }
 }
 
 const getGames = () => {
